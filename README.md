@@ -33,3 +33,7 @@ This is a tool for musicians to quickly save melodies that come to them while ou
  <li>Saving and loading JSON file to database</li>
 </ul>
 
+<h2>Stretch Goals</h2>
+<ul>
+ <li>Export tune as a midi file</li>
+</ul>
