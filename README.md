@@ -2,8 +2,8 @@ Destin Hudson
 March 2020
 Tuesday Project Class
 
-# Project Plan
-## tuneSaver
+<h1 align="center">Project Plan</h1>
+<h2 align="center">tuneSaver</h2>
 This is a tool for musicians to quickly save melodies that come to them while out and about using a basic in-app synthesizer on their phone that they can later access cross platform (phone/desktop). It will utilize the PWA model to deploy the app cross platform and will save the melodies to a database in C#.
 
 ## Technical Summary
@@ -18,7 +18,7 @@ This is a tool for musicians to quickly save melodies that come to them while ou
 <ul>
  <li>Keyboard for playing melody</li>
  <li>Records played melody<li>
- <li>Saves melody as JSON file (note, duration, rest, etc.)</li>
+ <li>Saves melody as JSON file as note, duration, rest, etc.</li>
  <li>Loads saved melody to C# database</li>
  <li>Saved melodies available from any platform</li>
 </ul>
