@@ -4,7 +4,7 @@
 
 <h1 align="center">Project Plan</h1>
 <h2 align="center">tuneSaver</h2>
-This is a tool for musicians to quickly save melodies that come to them while out and about using a basic in-app synthesizer on their phone that they can later access cross platform (phone/desktop). It will utilize the PWA model to deploy the app cross platform and will save the melodies to a database in C#.
+This is a tool for musicians to quickly save melodies that come to them while out and about using a basic in-app synthesizer on their phone that they can later access. It will utilize the PWA model to deploy the app cross platform.
 
 <h2>Technical Summary</h2>
 <ul>
@@ -29,11 +29,11 @@ This is a tool for musicians to quickly save melodies that come to them while ou
  <li>UI working for desktop</li>
  <li>Synth working in app</li>
  <li>Saving and loading tune with JSON</li>
- <li>Build database</li>
- <li>Saving and loading JSON file to database</li>
 </ul>
 
 <h2>Stretch Goals</h2>
 <ul>
  <li>Export tune as a midi file</li>
+ <li>Build database</li>
+ <li>Saving and loading JSON file to database</li>
 </ul>
