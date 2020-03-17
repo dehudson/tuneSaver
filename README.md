@@ -1,6 +1,6 @@
-Destin Hudson
-March 2020
-Tuesday Project Class
+<p>Destin Hudson</p>
+<p>March 2020</p>
+<p>Tuesday Project Class</p>
 
 <h1 align="center">Project Plan</h1>
 <h2 align="center">tuneSaver</h2>
