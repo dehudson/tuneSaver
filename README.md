@@ -17,7 +17,7 @@ This is a tool for musicians to quickly save melodies that come to them while ou
 <h2>Feature List</h2>
 <ul>
  <li>Keyboard for playing melody</li>
- <li>Records played melody<li>
+ <li>Records played melody</li>
  <li>Saves melody as JSON file as note, duration, rest, etc.</li>
  <li>Loads saved melody to C# database</li>
  <li>Saved melodies available from any platform</li>
