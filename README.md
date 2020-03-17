@@ -3,10 +3,10 @@ March 2020
 Tuesday Project Class
 
 <h1 align="center">Project Plan</h1>
-<h2 align="center">tuneSaver</h2>
+<h2>tuneSaver</h2>
 This is a tool for musicians to quickly save melodies that come to them while out and about using a basic in-app synthesizer on their phone that they can later access cross platform (phone/desktop). It will utilize the PWA model to deploy the app cross platform and will save the melodies to a database in C#.
 
-<h2 align="center">Technical Summary</h2>
+<h2>Technical Summary</h2>
 <ul>
  <li>C# for database</li>
  <li>HTML/CSS/js for UI</li>
@@ -14,7 +14,7 @@ This is a tool for musicians to quickly save melodies that come to them while ou
  <li>Tone.js free framework for in browser synthesis</li>
 </ul>
 
-<h2 align="center">Feature List</h2>
+<h2>Feature List</h2>
 <ul>
  <li>Keyboard for playing melody</li>
  <li>Records played melody<li>
