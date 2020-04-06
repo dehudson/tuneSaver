@@ -1,0 +1,39 @@
+body {
+    background-color: #212121;
+}
+
+.key-indicator {
+    transform: rotate(90deg);
+    color: white;
+    text-align: center;
+}
+
+.white-key {
+    background-color: white;
+    border: 1px solid gray;
+}
+
+.black-key {
+    background-color: black;
+}
+
+.rec-button {
+    background-color: red;
+    border-radius: 50%;
+    border: 4px solid #801b1b;
+    height: 14vh;
+    width: 14vh;
+}
+
+.key-change-button {
+    border-radius: 10%;
+    border: 2px solid #636363;
+    height: 8vh;
+    width: 8vh;
+    background-color: #212121;
+    color: #636363;
+    font-size: 20px;
+    font-weight: 700;
+    text-align: center;
+    transform: rotate(90deg);
+}
