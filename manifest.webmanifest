@@ -1,0 +1,21 @@
+{
+    "name": "tuneSaver Progressive Web App",
+    "short_name": "tuneSaver",
+    "description": "Progressive Web App that allows you to record a melody on the go to use later.",
+    "icons": [
+        {
+            "src": "icons/tuneicon32.png",
+            "sizes": "32x32",
+            "type": "image/png"
+        },
+        {
+            "src": "icons/tuneicon512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "theme_color": "#212121",
+    "background_color": "#212121"
+}
