@@ -11,21 +11,23 @@ body {
 .white-key {
     background-color: white;
     border: 1px solid gray;
+    border-radius: 5px 0 0 5px;
 }
 
 .black-key {
     background-color: black;
+    border-radius: 5px 0 0 5px;
 }
 
 .rec-button {
     background-color: red;
     border-radius: 50%;
     border: 4px solid #801b1b;
-    height: 14vh;
-    width: 14vh;
+    height: 10vh;
+    width: 10vh;
 }
 
-.key-change-button {
+.menu-button {
     border-radius: 10%;
     border: 2px solid #636363;
     height: 8vh;
@@ -35,5 +37,4 @@ body {
     font-size: 20px;
     font-weight: 700;
     text-align: center;
-    transform: rotate(90deg);
 }
