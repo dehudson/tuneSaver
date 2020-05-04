@@ -1,10 +1,13 @@
 var audioContext = null;
 var noteFreq = null;
-var oscList = [];
 var masterGainNode;
 var osc;
 var notePlaying = false;
 var currentOct = 4;
+var recording = false;
+var tuneStorage = window.localStorage;
+var date;
+var workingTune;
 
 function pressKey(event) {
     if (audioContext == null){
@@ -24,12 +27,10 @@ function releaseKey() {
     if (notePlaying == true){
         notePlaying = false;
         endNote();
-        console.log("released note");
     }
 }
 
 function playNote(freq) {
-    console.log("trying to play " + freq);
     osc.frequency.value = freq;
     osc.start();
 }
@@ -168,7 +169,30 @@ function createAudioSynth() {
     masterGainNode = audioContext.createGain();
     masterGainNode.connect(audioContext.destination);
     masterGainNode.gain.value = 0.5;
+}
 
+function record() {
+    if (recording == false) {
+        recording = true;
+        date = new Date();
+        workingTune = {
+            "date" : date.toDateString(),
+            "time" : date.toTimeString().substring(0, 8),
+            "step_quantity" : 0,
+            "steps" : {
+
+            }
+        }
+    } else {
+        recording = false;
+        saveTune(workingTune);
+        console.log(Object.keys(tuneStorage));
+        console.log(tuneStorage.getItem(tuneStorage.key(tuneStorage.length-1)));
+    }
+}
+
+function saveTune(tune) {
+    tuneStorage.setItem(tune.date + " " + tune.time, JSON.stringify(tune));
 }
 
 function setup() {
@@ -200,11 +224,36 @@ function setup() {
     document.addEventListener("mouseup", releaseKey, false);
 
     document.getElementById("oct-selector").addEventListener("click", changeOct, false);
+    document.getElementById("rec-button").addEventListener("click", record, false);
 
     noteFreq = createNoteTable();
 }
 
 setup();
+tuneStorage.clear();
 
-console.log("script loaded");
-// console.log(noteFreq);
+
+// tuneStorage.clear();
+// console.log("Storage size: " + tuneStorage.length);
+// var date = new Date();
+// var testStorage = {
+//     "date" : date.toDateString(),
+//     "time" : date.toTimeString(),
+//     "step_quantity" : 0,
+//     "steps" : {
+//         "C" : 150,
+//         "rest" : 100,
+//         "D#" : 50
+//     }
+// }
+// console.log("JSON Object:");
+// console.log(testStorage);
+// tuneStorage.setItem(testStorage.date_time, JSON.stringify(testStorage));
+// console.log("Tune Storage length: " + tuneStorage.length);
+// var fromStorage = localStorage.getItem(localStorage.key(0));
+// console.log("Storage JSON:");
+// console.log(fromStorage);
+
+// console.log("Storage size: " + tuneStorage.length);
+// tuneStorage.clear();
+// console.log("Storage size: " + tuneStorage.length);
