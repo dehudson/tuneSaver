@@ -14,16 +14,6 @@ var lastTimeStamp;
 var state = 0;
 
 function pressKey(event) {
-    // if (audioContext == null){
-    //     createAudioSynth();
-    //     console.log("audio context created");
-    // }
-    // if (notePlaying == false){
-    //     notePlaying = true;
-    // }
-    // osc = audioContext.createOscillator();
-    // osc.connect(masterGainNode);
-    // osc.type = 'sawtooth';
     let currentNote = event.target.dataset["note"];
     if (recording) {
         if (lastPlayed == null) {
@@ -229,24 +219,31 @@ function record() {
         console.log(Object.keys(tuneStorage));
         console.log(tuneStorage.getItem(tuneStorage.key(0)));
         document.getElementById("rec-button").innerHTML = "REC";
+        currentStep = 0;
     }
 }
 
 function playback() {
-    let totalSteps = workingTune.steps.length;
-    let lastStep;
-    for (i = 0; i < totalSteps; i++) {
+    console.log("Playing...");
+    for (i = 0; workingTune.steps[i] != null; i++) {
+        console.log("Current step:");
+        console.log("Played: " + workingTune.steps[i][0]);
+        console.log("Time: " + workingTune.steps[i][1]);
         if (i > 0) {
-            if (lastStep = "rest") {
-                setTimeout(playNote(noteFreq[currentOct][workingTune.steps.key(i)]), workingTune.steps[lastStep]);
-                lastStep = workingTune.steps.key(i);
+            if (workingTune.steps[i][0] == "rest") {
+                console.log("REST");
+                hold(workingTune.steps[i][1]);
             } else {
-                setTimeout(endNote(), workingTune.steps[lastStep]);
-                lastStep = workingTune.steps.key(i);
+                console.log("NOTE");
+                playNote(noteFreq[currentOct][workingTune.steps[i][0]]);
+                hold(workingTune.steps[i][1]);
+                endNote();
             }
         } else {
-            playNote(noteFreq[currentOct][workingTune.steps.key(i)]);
-            lastStep = workingTune.steps.key(i);
+            console.log("FIRST NOTE");
+            playNote(noteFreq[currentOct][workingTune.steps[i][0]]);
+            hold(workingTune.steps[i][1]);
+            endNote();
         }
     }
 }
@@ -275,11 +272,20 @@ function switchState() {
     }
 }
 
+function hold(milliseconds) {
+    const date = Date.now();
+    let currentDate = null;
+    do {
+        currentDate = Date.now();
+    } while (currentDate - date < milliseconds);
+}
+
 function loadTune() {
     if (tuneStorage.length != 0) {
         workingTune = JSON.parse(tuneStorage.getItem(tuneStorage.key(0)));
         currentOct = workingTune.octave;
         document.getElementById("oct-selector").innerHTML = "OCT " + currentOct;
+        console.log("Loaded tune: ");
         console.log(workingTune);
     }
 }
