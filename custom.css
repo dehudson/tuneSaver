@@ -29,7 +29,17 @@ body {
     color: white;
 }
 
-.menu-button {
+#play-button {
+    background-color: green;
+    border-radius: 50%;
+    border: 4px solid #013a04;
+    height: 10vh;
+    width: 10vh;
+    transform: rotate(90deg);
+    color: white;
+}
+
+#menu-button {
     border-radius: 10%;
     border: 2px solid #636363;
     height: 8vh;

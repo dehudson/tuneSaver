@@ -9,28 +9,33 @@ var tuneStorage = window.localStorage;
 var date;
 var workingTune;
 var lastPlayed;
+var currentStep;
 var lastTimeStamp;
+var state = 0;
 
 function pressKey(event) {
-    if (audioContext == null){
-        createAudioSynth();
-        console.log("audio context created");
-    }
-    if (notePlaying == false){
-        notePlaying = true;
-    }
-    osc = audioContext.createOscillator();
-    osc.connect(masterGainNode);
-    osc.type = 'sawtooth';
+    // if (audioContext == null){
+    //     createAudioSynth();
+    //     console.log("audio context created");
+    // }
+    // if (notePlaying == false){
+    //     notePlaying = true;
+    // }
+    // osc = audioContext.createOscillator();
+    // osc.connect(masterGainNode);
+    // osc.type = 'sawtooth';
     let currentNote = event.target.dataset["note"];
     if (recording) {
         if (lastPlayed == null) {
             lastPlayed = currentNote;
             lastTimeStamp = Date.now();
+            currentStep = 0;
         } else {
             let newTimeStamp = Date.now();
-            workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
+            workingTune.steps[currentStep] = [lastPlayed, newTimeStamp - lastTimeStamp];
+            // workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
             lastTimeStamp = newTimeStamp;
+            currentStep++;
             lastPlayed = currentNote;
         }
     }
@@ -40,8 +45,10 @@ function pressKey(event) {
 function releaseKey() {
     if (recording) {
         let newTimeStamp = Date.now();
-        workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
+        workingTune.steps[currentStep] = [lastPlayed, newTimeStamp - lastTimeStamp];
+        // workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
         lastTimeStamp = newTimeStamp;
+        currentStep++;
         lastPlayed = "rest";
     }
     if (notePlaying){
@@ -51,7 +58,17 @@ function releaseKey() {
 }
 
 function playNote(freq) {
+    if (audioContext == null){
+        createAudioSynth();
+        console.log("audio context created");
+    }
+    osc = audioContext.createOscillator();
+    osc.connect(masterGainNode);
+    osc.type = 'sawtooth';
     osc.frequency.value = freq;
+    if (notePlaying == false){
+        notePlaying = true;
+    }
     osc.start();
 }
 
@@ -208,9 +225,62 @@ function record() {
         recording = false;
         lastPlayed = null;
         saveTune(workingTune);
+        workingTune = null;
         console.log(Object.keys(tuneStorage));
         console.log(tuneStorage.getItem(tuneStorage.key(0)));
         document.getElementById("rec-button").innerHTML = "REC";
+    }
+}
+
+function playback() {
+    let totalSteps = workingTune.steps.length;
+    let lastStep;
+    for (i = 0; i < totalSteps; i++) {
+        if (i > 0) {
+            if (lastStep = "rest") {
+                setTimeout(playNote(noteFreq[currentOct][workingTune.steps.key(i)]), workingTune.steps[lastStep]);
+                lastStep = workingTune.steps.key(i);
+            } else {
+                setTimeout(endNote(), workingTune.steps[lastStep]);
+                lastStep = workingTune.steps.key(i);
+            }
+        } else {
+            playNote(noteFreq[currentOct][workingTune.steps.key(i)]);
+            lastStep = workingTune.steps.key(i);
+        }
+    }
+}
+
+function switchState() {
+    if (state == 0) {
+        state = 1;
+        let parent = document.getElementById("rec-button").parentNode;
+        parent.removeChild(document.getElementById("rec-button"));
+        let newButton = document.createElement("button");
+        newButton.setAttribute('id', "play-button");
+        newButton.innerHTML = "PLAY";
+        newButton.addEventListener("click", playback, false);
+        parent.appendChild(newButton);
+        loadTune();
+    } else {
+        state = 0;
+        let parent = document.getElementById("play-button").parentNode;
+        parent.removeChild(document.getElementById("play-button"));
+        let newButton = document.createElement("button");
+        newButton.setAttribute('id', "rec-button");
+        newButton.innerHTML = "REC";
+        newButton.addEventListener("click", record, false);
+        parent.appendChild(newButton);
+        workingTune = null;
+    }
+}
+
+function loadTune() {
+    if (tuneStorage.length != 0) {
+        workingTune = JSON.parse(tuneStorage.getItem(tuneStorage.key(0)));
+        currentOct = workingTune.octave;
+        document.getElementById("oct-selector").innerHTML = "OCT " + currentOct;
+        console.log(workingTune);
     }
 }
 
@@ -248,6 +318,7 @@ function setup() {
 
     document.getElementById("oct-selector").addEventListener("click", changeOct, false);
     document.getElementById("rec-button").addEventListener("click", record, false);
+    document.getElementById("menu-button").addEventListener("click", switchState, false);
 
     noteFreq = createNoteTable();
 }
