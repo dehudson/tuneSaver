@@ -8,6 +8,8 @@ var recording = false;
 var tuneStorage = window.localStorage;
 var date;
 var workingTune;
+var lastPlayed;
+var lastTimeStamp;
 
 function pressKey(event) {
     if (audioContext == null){
@@ -20,11 +22,29 @@ function pressKey(event) {
     osc = audioContext.createOscillator();
     osc.connect(masterGainNode);
     osc.type = 'sawtooth';
-    playNote(noteFreq[currentOct][event.target.dataset["note"]]);
+    let currentNote = event.target.dataset["note"];
+    if (recording) {
+        if (lastPlayed == null) {
+            lastPlayed = currentNote;
+            lastTimeStamp = Date.now();
+        } else {
+            let newTimeStamp = Date.now();
+            workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
+            lastTimeStamp = newTimeStamp;
+            lastPlayed = currentNote;
+        }
+    }
+    playNote(noteFreq[currentOct][currentNote]);
 }
 
 function releaseKey() {
-    if (notePlaying == true){
+    if (recording) {
+        let newTimeStamp = Date.now();
+        workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
+        lastTimeStamp = newTimeStamp;
+        lastPlayed = "rest";
+    }
+    if (notePlaying){
         notePlaying = false;
         endNote();
     }
@@ -178,16 +198,19 @@ function record() {
         workingTune = {
             "date" : date.toDateString(),
             "time" : date.toTimeString().substring(0, 8),
-            "step_quantity" : 0,
+            "octave" : currentOct,
             "steps" : {
 
             }
         }
+        document.getElementById("rec-button").innerHTML = "STOP";
     } else {
         recording = false;
+        lastPlayed = null;
         saveTune(workingTune);
         console.log(Object.keys(tuneStorage));
-        console.log(tuneStorage.getItem(tuneStorage.key(tuneStorage.length-1)));
+        console.log(tuneStorage.getItem(tuneStorage.key(0)));
+        document.getElementById("rec-button").innerHTML = "REC";
     }
 }
 
