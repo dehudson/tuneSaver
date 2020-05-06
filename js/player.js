@@ -12,6 +12,7 @@ var lastPlayed;
 var currentStep;
 var lastTimeStamp;
 var state = 0;
+var menuOpen = false;
 
 function pressKey(event) {
     let currentNote = event.target.dataset["note"];
@@ -23,7 +24,6 @@ function pressKey(event) {
         } else {
             let newTimeStamp = Date.now();
             workingTune.steps[currentStep] = [lastPlayed, newTimeStamp - lastTimeStamp];
-            // workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
             lastTimeStamp = newTimeStamp;
             currentStep++;
             lastPlayed = currentNote;
@@ -36,7 +36,6 @@ function releaseKey() {
     if (recording) {
         let newTimeStamp = Date.now();
         workingTune.steps[currentStep] = [lastPlayed, newTimeStamp - lastTimeStamp];
-        // workingTune.steps[lastPlayed] = newTimeStamp - lastTimeStamp;
         lastTimeStamp = newTimeStamp;
         currentStep++;
         lastPlayed = "rest";
@@ -226,26 +225,34 @@ function record() {
 function playback() {
     console.log("Playing...");
     for (i = 0; workingTune.steps[i] != null; i++) {
-        console.log("Current step:");
-        console.log("Played: " + workingTune.steps[i][0]);
-        console.log("Time: " + workingTune.steps[i][1]);
         if (i > 0) {
             if (workingTune.steps[i][0] == "rest") {
-                console.log("REST");
                 hold(workingTune.steps[i][1]);
             } else {
-                console.log("NOTE");
                 playNote(noteFreq[currentOct][workingTune.steps[i][0]]);
                 hold(workingTune.steps[i][1]);
                 endNote();
             }
         } else {
-            console.log("FIRST NOTE");
             playNote(noteFreq[currentOct][workingTune.steps[i][0]]);
             hold(workingTune.steps[i][1]);
             endNote();
         }
     }
+}
+
+function openCloseMenu() {
+    if (menuOpen) {
+        document.getElementById("menu-overlay").style.display = "none";
+        menuOpen = false;
+    } else {
+        document.getElementById("menu-overlay").style.display = "block";
+        menuOpen = true;
+    }
+}
+
+function closeMenu() {
+    document.getElementById("menu-overlay").style.display = "none";
 }
 
 function switchState() {
@@ -324,7 +331,7 @@ function setup() {
 
     document.getElementById("oct-selector").addEventListener("click", changeOct, false);
     document.getElementById("rec-button").addEventListener("click", record, false);
-    document.getElementById("menu-button").addEventListener("click", switchState, false);
+    document.getElementById("menu-button").addEventListener("click", openCloseMenu, false);
 
     noteFreq = createNoteTable();
 }
