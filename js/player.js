@@ -415,6 +415,8 @@ function setup() {
 
     noteFreq = createNoteTable();
     populateTuneList();
+
+    ScreenOrientation.lock(portait);
 }
 // tuneStorage.clear();
 setup();
