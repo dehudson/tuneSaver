@@ -227,6 +227,7 @@ function playback() {
                 endNote();
             }
         } else {
+            console.log("Step 1");
             playNote(noteFreq[currentOct][workingTune.steps[i][0]]);
             hold(workingTune.steps[i][1]);
             endNote();
@@ -430,5 +431,5 @@ function setup() {
 
     ScreenOrientation.lock(portait);
 }
-// tuneStorage.clear();
+tuneStorage.clear();
 setup();

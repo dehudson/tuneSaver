@@ -12,11 +12,15 @@ body {
     background-color: white;
     border: 1px solid gray;
     border-radius: 6px 0 0 6px;
+    height: 7vh;
+    width: 100%
 }
 
 .black-key {
     background-color: black;
     border-radius: 6px 0 0 6px;
+    height: 7vh;
+    width: 100%;
 }
 
 #rec-button {
@@ -91,4 +95,51 @@ body {
     transform: rotate(90deg);
     white-space: nowrap;
     margin-top: 10px;
+}
+
+@media (min-width: 800px) {
+  
+    #oct-selector, #menu-button, #play-button, #rec-button, .menu-item {
+        transform: rotate(0deg);
+        min-height: 80px;
+        min-width: 80px;
+    }
+
+    #oct-selector, #play-button, #rec-button {
+        min-height: 80px;
+        min-width: 80px;
+    }
+
+    #menu-button {
+        min-height: 40px;
+        min-width: 80px;
+    }
+
+    .menu-item-container {
+        display: block;
+        border-right: 0;
+        border-bottom: 1px solid #636363;
+        height: 30px;
+        width: 80vw;
+    }
+
+    #menu-overlay {
+        overflow-x: hidden;
+        overflow-y: scroll;
+        max-width: 500px;
+    }
+
+    .white-key, .black-key {
+        width: 8.33%;
+        height: 100%;
+        border-radius: 0 0 6px 6px;
+        white-space: nowrap;
+        display: inline-block;
+    }
+
+    #keyboard {
+        white-space: nowrap;
+        width: 100%;
+    }
+    
 }
