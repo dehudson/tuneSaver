@@ -217,7 +217,6 @@ function record() {
 }
 
 function playback() {
-    console.log("Playing...");
     for (i = 0; workingTune.steps[i] != null; i++) {
         if (i > 0) {
             if (workingTune.steps[i][0] == "rest") {
@@ -381,31 +380,44 @@ function initializeTune() {
 
 function setup() {
     document.getElementById("C").addEventListener("mousedown", pressKey, false);
+    document.getElementById("C").addEventListener("touchstart", pressKey, false);
     document.getElementById("C").dataset["note"] = "C";
     document.getElementById("C#").addEventListener("mousedown", pressKey, false);
+    document.getElementById("C#").addEventListener("touchstart", pressKey, false);
     document.getElementById("C#").dataset["note"] = "C#";
     document.getElementById("D").addEventListener("mousedown", pressKey, false);
+    document.getElementById("D").addEventListener("touchstart", pressKey, false);
     document.getElementById("D").dataset["note"] = "D";
     document.getElementById("D#").addEventListener("mousedown", pressKey, false);
+    document.getElementById("D#").addEventListener("touchstart", pressKey, false);
     document.getElementById("D#").dataset["note"] = "D#";
     document.getElementById("E").addEventListener("mousedown", pressKey, false);
+    document.getElementById("E").addEventListener("touchstart", pressKey, false);
     document.getElementById("E").dataset["note"] = "E";
     document.getElementById("F").addEventListener("mousedown", pressKey, false);
+    document.getElementById("F").addEventListener("touchstart", pressKey, false);
     document.getElementById("F").dataset["note"] = "F";
     document.getElementById("F#").addEventListener("mousedown", pressKey, false);
+    document.getElementById("F#").addEventListener("touchstart", pressKey, false);
     document.getElementById("F#").dataset["note"] = "F#";
     document.getElementById("G").addEventListener("mousedown", pressKey, false);
+    document.getElementById("G").addEventListener("touchstart", pressKey, false);
     document.getElementById("G").dataset["note"] = "G";
     document.getElementById("G#").addEventListener("mousedown", pressKey, false);
+    document.getElementById("G#").addEventListener("touchstart", pressKey, false);
     document.getElementById("G#").dataset["note"] = "G#";
     document.getElementById("A").addEventListener("mousedown", pressKey, false);
+    document.getElementById("A").addEventListener("touchstart", pressKey, false);
     document.getElementById("A").dataset["note"] = "A";
     document.getElementById("A#").addEventListener("mousedown", pressKey, false);
+    document.getElementById("A#").addEventListener("touchstart", pressKey, false);
     document.getElementById("A#").dataset["note"] = "A#";
     document.getElementById("B").addEventListener("mousedown", pressKey, false);
+    document.getElementById("B").addEventListener("touchstart", pressKey, false);
     document.getElementById("B").dataset["note"] = "B";
 
     document.addEventListener("mouseup", releaseKey, false);
+    document.addEventListener("touchend", releaseKey, false);
 
     document.getElementById("oct-selector").addEventListener("click", changeOct, false);
     document.getElementById("rec-button").addEventListener("click", record, false);

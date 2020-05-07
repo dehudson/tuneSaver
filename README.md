@@ -8,7 +8,6 @@ This is a tool for musicians to quickly save melodies that come to them while ou
 
 <h2>Technical Summary</h2>
 <ul>
- <li>C# for database</li>
  <li>Bootstrap for UI</li>
  <li>PWA Model</li>
  <li>Tone.js free framework for in browser synthesis</li>
