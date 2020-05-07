@@ -13,6 +13,9 @@ var currentStep;
 var lastTimeStamp;
 var state = 0;
 var menuOpen = false;
+var tuneList = [];
+var menuButton;
+var menuOverlay;
 
 function pressKey(event) {
     let currentNote = event.target.dataset["note"];
@@ -201,22 +204,13 @@ function record() {
     if (recording == false) {
         recording = true;
         date = new Date();
-        workingTune = {
-            "date" : date.toDateString(),
-            "time" : date.toTimeString().substring(0, 8),
-            "octave" : currentOct,
-            "steps" : {
-
-            }
-        }
+        initializeTune();
         document.getElementById("rec-button").innerHTML = "STOP";
     } else {
         recording = false;
         lastPlayed = null;
         saveTune(workingTune);
         workingTune = null;
-        console.log(Object.keys(tuneStorage));
-        console.log(tuneStorage.getItem(tuneStorage.key(0)));
         document.getElementById("rec-button").innerHTML = "REC";
         currentStep = 0;
     }
@@ -241,18 +235,65 @@ function playback() {
     }
 }
 
-function openCloseMenu() {
-    if (menuOpen) {
-        document.getElementById("menu-overlay").style.display = "none";
-        menuOpen = false;
-    } else {
-        document.getElementById("menu-overlay").style.display = "block";
+function openMenu() {
+    if (!menuOpen) {
+        populateMenu();
+        menuOverlay.style.display = "block";
         menuOpen = true;
+    } else {
+        closeMenu();
     }
 }
 
 function closeMenu() {
-    document.getElementById("menu-overlay").style.display = "none";
+    if (menuOpen) {
+        clearMenu();
+        menuOverlay.style.display = "none";
+        menuOpen = false;
+    }
+}
+
+function populateMenu() {
+    menuOverlay.appendChild(createNewTuneMenuItem());
+
+    console.log (tuneList);
+
+    for (i in tuneList) {
+        menuOverlay.appendChild(createMenuItem(tuneList[i]));
+    }
+}
+
+function clearMenu() {
+    while (menuOverlay.firstChild) {
+        menuOverlay.removeChild(menuOverlay.firstChild);
+    }
+}
+
+function createMenuItem(tune) {
+    let newItem = document.createElement("div");
+    newItem.setAttribute("class", "col-2 menu-item-container");
+    newItem.dataset.title = tune.title;
+    newItem.addEventListener("click", function() { loadTune(newItem.dataset.title); }, false);
+    let newElement = document.createElement("p");
+    newElement.setAttribute("class", "menu-item");
+    newElement.innerHTML = tune.title;
+    newItem.appendChild(newElement);
+
+    return newItem;
+}
+
+function createNewTuneMenuItem() {
+    let newItem = document.createElement("div");
+    newItem.setAttribute("class", "col-2 menu-item-container");
+    newItem.setAttribute("id", "new-tune");
+    newItem.dataset.title = "new tune";
+    newItem.addEventListener("click", function() { loadTune(newItem.dataset.title); }, false);
+    let childElement = document.createElement("p");
+    childElement.innerHTML = "New tune";
+    childElement.setAttribute("class", "menu-item");
+    newItem.appendChild(childElement);
+
+    return newItem;
 }
 
 function switchState() {
@@ -287,18 +328,55 @@ function hold(milliseconds) {
     } while (currentDate - date < milliseconds);
 }
 
-function loadTune() {
-    if (tuneStorage.length != 0) {
-        workingTune = JSON.parse(tuneStorage.getItem(tuneStorage.key(0)));
-        currentOct = workingTune.octave;
-        document.getElementById("oct-selector").innerHTML = "OCT " + currentOct;
-        console.log("Loaded tune: ");
-        console.log(workingTune);
+function loadTune(title) {
+    console.log(title);
+    if (title == "new tune") {
+        initializeTune();
+        if (state == 1) {
+            switchState();
+        }
+        menuButton.innerHTML = "New tune";
+    } else {
+        for (i in tuneList) {
+            if (tuneList[i]["title"] == title) {
+                workingTune = tuneList[i];
+                currentOct = workingTune.octave;
+                document.getElementById("oct-selector").innerHTML = "OCT " + currentOct;
+                menuButton.innerHTML = title;
+
+                if (state == 0) {
+                    switchState();
+                }
+            }
+        }
     }
+    console.log("Attempting to close menu");
+    closeMenu();
 }
 
 function saveTune(tune) {
-    tuneStorage.setItem(tune.date + " " + tune.time, JSON.stringify(tune));
+    tuneStorage.setItem(tune["title"], JSON.stringify(tune));
+    tuneList.push(tune);
+}
+
+function populateTuneList() {
+    let storageSize = tuneStorage.length;
+    if (storageSize != 0) {
+        for (i = 0; i < storageSize; i++) {
+            let tune = JSON.parse(tuneStorage.getItem(tuneStorage.key(i)));
+            tuneList.push(tune);
+        }
+    }
+}
+
+function initializeTune() {
+    workingTune = {
+        "title" : date.toDateString() + " " + date.toTimeString().substring(0, 8),
+        "octave" : currentOct,
+        "steps" : {
+
+        }
+    }
 }
 
 function setup() {
@@ -331,36 +409,12 @@ function setup() {
 
     document.getElementById("oct-selector").addEventListener("click", changeOct, false);
     document.getElementById("rec-button").addEventListener("click", record, false);
-    document.getElementById("menu-button").addEventListener("click", openCloseMenu, false);
+    menuButton = document.getElementById("menu-button");
+    menuButton.addEventListener("click", openMenu, false);
+    menuOverlay = document.getElementById("menu-overlay");
 
     noteFreq = createNoteTable();
+    populateTuneList();
 }
-
+// tuneStorage.clear();
 setup();
-tuneStorage.clear();
-
-
-// tuneStorage.clear();
-// console.log("Storage size: " + tuneStorage.length);
-// var date = new Date();
-// var testStorage = {
-//     "date" : date.toDateString(),
-//     "time" : date.toTimeString(),
-//     "step_quantity" : 0,
-//     "steps" : {
-//         "C" : 150,
-//         "rest" : 100,
-//         "D#" : 50
-//     }
-// }
-// console.log("JSON Object:");
-// console.log(testStorage);
-// tuneStorage.setItem(testStorage.date_time, JSON.stringify(testStorage));
-// console.log("Tune Storage length: " + tuneStorage.length);
-// var fromStorage = localStorage.getItem(localStorage.key(0));
-// console.log("Storage JSON:");
-// console.log(fromStorage);
-
-// console.log("Storage size: " + tuneStorage.length);
-// tuneStorage.clear();
-// console.log("Storage size: " + tuneStorage.length);
